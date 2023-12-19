@@ -1,0 +1,15 @@
+#!/bin/bash
+
+cd /root/easy-rsa
+
+if [[ ! -z "$1" ]]
+then
+    OPENVPN_CLIENT_NAME="$1"
+else
+    OPENVPN_CLIENT_NAME="client-$(date +%s)"
+fi
+
+./easyrsa --req-cn=$OPENVPN_CLIENT_NAME gen-req $OPENVPN_CLIENT_NAME nopass
+./easyrsa sign-req client $OPENVPN_CLIENT_NAME
+
+/root/scripts/make-client-config $OPENVPN_CLIENT_NAME

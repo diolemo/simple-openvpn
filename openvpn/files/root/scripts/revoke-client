@@ -1,0 +1,19 @@
+#!/bin/bash
+
+cd /root/easy-rsa
+
+OPENVPN_CLIENT_NAME="$1"
+
+if [[ -z "$1" ]]
+then
+    echo 'usage: ./revoke-client <name>';
+    exit 1
+fi
+
+./easyrsa revoke $OPENVPN_CLIENT_NAME
+./easyrsa gen-crl
+
+cp pki/crl.pem /etc/openvpn/server/crl.pem
+
+echo 'The certificate has been revoked.';
+echo 'Restart the server to apply changes.';

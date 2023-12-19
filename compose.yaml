@@ -1,0 +1,19 @@
+services:
+  openvpn:
+    container_name: simple-openvpn
+    cap_add:
+        - NET_ADMIN
+    sysctls:
+      - net.ipv4.ip_forward=1
+    build:
+      context: ./openvpn
+    env_file:
+      - .env
+    restart: unless-stopped
+    volumes:
+      - './openvpn/clients:/root/clients'
+      - './openvpn/files/root/easy-rsa:/root/easy-rsa'
+    ports:
+      - ${DEV_OPENVPN_PORT:-1194}:1194
+
+ 
